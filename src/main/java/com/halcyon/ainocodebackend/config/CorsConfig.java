@@ -1,4 +1,4 @@
-package com.halcyon.backendtemplate.config;
+package com.halcyon.ainocodebackend.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

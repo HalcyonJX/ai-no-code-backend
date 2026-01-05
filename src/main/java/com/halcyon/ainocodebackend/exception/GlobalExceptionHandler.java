@@ -1,7 +1,7 @@
-package com.halcyon.backendtemplate.exception;
+package com.halcyon.ainocodebackend.exception;
 
-import com.halcyon.backendtemplate.common.BaseResponse;
-import com.halcyon.backendtemplate.common.ResultUtils;
+import com.halcyon.ainocodebackend.common.BaseResponse;
+import com.halcyon.ainocodebackend.common.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

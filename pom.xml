@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.halcyon</groupId>
-    <artifactId>backend-template</artifactId>
+    <artifactId>ai-no-code-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>backend-template</name>
-    <description>backend-template</description>
+    <name>ai-no-code-backend</name>
+    <description>ai-no-code-backend</description>
     <url/>
     <licenses>
         <license/>

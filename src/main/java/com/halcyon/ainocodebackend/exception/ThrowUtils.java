@@ -1,4 +1,4 @@
-package com.halcyon.backendtemplate.exception;
+package com.halcyon.ainocodebackend.exception;
 
 public class ThrowUtils {
 

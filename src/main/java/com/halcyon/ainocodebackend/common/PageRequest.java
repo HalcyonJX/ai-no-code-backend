@@ -1,4 +1,4 @@
-package com.halcyon.backendtemplate.common;
+package com.halcyon.ainocodebackend.common;
 
 import lombok.Data;
 

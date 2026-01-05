@@ -1,4 +1,4 @@
-package com.halcyon.backendtemplate.controller;
+package com.halcyon.ainocodebackend.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

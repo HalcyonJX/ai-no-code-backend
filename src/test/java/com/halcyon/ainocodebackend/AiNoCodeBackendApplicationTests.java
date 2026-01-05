@@ -1,10 +1,10 @@
-package com.halcyon.backendtemplate;
+package com.halcyon.ainocodebackend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BackendTemplateApplicationTests {
+class AiNoCodeBackendApplicationTests {
 
     @Test
     void contextLoads() {

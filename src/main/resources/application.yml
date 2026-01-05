@@ -4,7 +4,7 @@ server:
     context-path: /api
 spring:
   application:
-    name: backend-template
+    name: ai-no-code-backend
   profiles:
     active: local
   # 数据库配置
@@ -17,7 +17,7 @@ spring:
 springdoc:
   group-configs:
     - group: 'default'
-      packages-to-scan: com.halcyon.backendtemplate.controller
+      packages-to-scan: com.halcyon.ainocodebackend.controller
 # knife4j
 knife4j:
   enable: true

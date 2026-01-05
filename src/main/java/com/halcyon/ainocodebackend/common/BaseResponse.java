@@ -1,6 +1,6 @@
-package com.halcyon.backendtemplate.common;
+package com.halcyon.ainocodebackend.common;
 
-import com.halcyon.backendtemplate.exception.ErrorCode;
+import com.halcyon.ainocodebackend.exception.ErrorCode;
 import lombok.Data;
 
 import java.io.Serializable;
