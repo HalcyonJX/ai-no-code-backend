@@ -1,6 +1,7 @@
 
 # custom
 application-local.yml
+tmp
 
 
 target/
