@@ -1,6 +1,7 @@
 package com.halcyon.ainocodebackend.core;
 
 import com.halcyon.ainocodebackend.ai.AiCodeGeneratorService;
+import com.halcyon.ainocodebackend.ai.AiCodeGeneratorServiceFactory;
 import com.halcyon.ainocodebackend.ai.model.HtmlCodeResult;
 import com.halcyon.ainocodebackend.ai.model.MultiFileCodeResult;
 import com.halcyon.ainocodebackend.core.parser.CodeParserExecutor;
@@ -24,8 +25,14 @@ import java.io.File;
 @Slf4j
 public class AiCodeGeneratorFacade {
 
+//    @Resource
+//    private AiCodeGeneratorService aiCodeGeneratorService;
+
     @Resource
-    private AiCodeGeneratorService aiCodeGeneratorService;
+    private AiCodeGeneratorServiceFactory aiCodeGeneratorServiceFactory;
+
+    // 根据 appId 获取对应的 AI 服务实例
+//    AiCodeGeneratorService aiCodeGeneratorService = aiCodeGeneratorServiceFactory.getAiCodeGeneratorService(appId);
 
     /**
      * 统一入口：根据类型生成并保存代码（使用 appId）
@@ -38,6 +45,7 @@ public class AiCodeGeneratorFacade {
         if (codeGenTypeEnum == null) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "生成类型为空");
         }
+        AiCodeGeneratorService aiCodeGeneratorService = aiCodeGeneratorServiceFactory.getAiCodeGeneratorService(appId);
         return switch (codeGenTypeEnum) {
             case HTML -> {
                 HtmlCodeResult result = aiCodeGeneratorService.generateHtmlCode(userMessage);
@@ -65,6 +73,7 @@ public class AiCodeGeneratorFacade {
         if (codeGenTypeEnum == null) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "生成类型为空");
         }
+        AiCodeGeneratorService aiCodeGeneratorService = aiCodeGeneratorServiceFactory.getAiCodeGeneratorService(appId);
         return switch (codeGenTypeEnum) {
             case HTML -> {
                 Flux<String> codeStream = aiCodeGeneratorService.generateHtmlCodeStream(userMessage);
@@ -109,83 +118,83 @@ public class AiCodeGeneratorFacade {
         });
     }
 
-    /**
-     * 生成 HTML 模式的代码并保存
-     *
-     * @param userMessage 用户提示词
-     * @return 保存的目录
-     */
-    private File generateAndSaveHtmlCode(String userMessage) {
-        HtmlCodeResult result = aiCodeGeneratorService.generateHtmlCode(userMessage);
-        return CodeFileSaver.saveHtmlCodeResult(result);
-    }
-
-    /**
-     * 生成多文件模式的代码并保存
-     *
-     * @param userMessage 用户提示词
-     * @return 保存的目录
-     */
-    private File generateAndSaveMultiFileCode(String userMessage) {
-        MultiFileCodeResult result = aiCodeGeneratorService.generateMultiFileCode(userMessage);
-        return CodeFileSaver.saveMultiFileCodeResult(result);
-    }
-
-    /**
-     * 生成 HTML 模式的代码并保存（流式）
-     *
-     * @param userMessage 用户提示词
-     * @return 保存的目录
-     */
-    private Flux<String> generateAndSaveHtmlCodeStream(String userMessage) {
-        Flux<String> result = aiCodeGeneratorService.generateHtmlCodeStream(userMessage);
-        // 当流式返回生成代码完成后，再保存代码
-        StringBuilder codeBuilder = new StringBuilder();
-        return result
-                .doOnNext(chunk -> {
-                    // 实时收集代码片段
-                    codeBuilder.append(chunk);
-                })
-                .doOnComplete(() -> {
-                    // 流式返回完成后保存代码
-                    try {
-                        String completeHtmlCode = codeBuilder.toString();
-                        HtmlCodeResult htmlCodeResult = CodeParser.parseHtmlCode(completeHtmlCode);
-                        // 保存代码到文件
-                        File savedDir = CodeFileSaver.saveHtmlCodeResult(htmlCodeResult);
-                        log.info("保存成功，路径为：" + savedDir.getAbsolutePath());
-                    } catch (Exception e) {
-                        log.error("保存失败: {}", e.getMessage());
-                    }
-                });
-    }
-
-    /**
-     * 生成多文件模式的代码并保存（流式）
-     *
-     * @param userMessage 用户提示词
-     * @return 保存的目录
-     */
-    private Flux<String> generateAndSaveMultiFileCodeStream(String userMessage) {
-        Flux<String> result = aiCodeGeneratorService.generateMultiFileCodeStream(userMessage);
-        // 当流式返回生成代码完成后，再保存代码
-        StringBuilder codeBuilder = new StringBuilder();
-        return result
-                .doOnNext(chunk -> {
-                    // 实时收集代码片段
-                    codeBuilder.append(chunk);
-                })
-                .doOnComplete(() -> {
-                    // 流式返回完成后保存代码
-                    try {
-                        String completeMultiFileCode = codeBuilder.toString();
-                        MultiFileCodeResult multiFileResult = CodeParser.parseMultiFileCode(completeMultiFileCode);
-                        // 保存代码到文件
-                        File savedDir = CodeFileSaver.saveMultiFileCodeResult(multiFileResult);
-                        log.info("保存成功，路径为：" + savedDir.getAbsolutePath());
-                    } catch (Exception e) {
-                        log.error("保存失败: {}", e.getMessage());
-                    }
-                });
-    }
+//    /**
+//     * 生成 HTML 模式的代码并保存
+//     *
+//     * @param userMessage 用户提示词
+//     * @return 保存的目录
+//     */
+//    private File generateAndSaveHtmlCode(String userMessage) {
+//        HtmlCodeResult result = aiCodeGeneratorService.generateHtmlCode(userMessage);
+//        return CodeFileSaver.saveHtmlCodeResult(result);
+//    }
+//
+//    /**
+//     * 生成多文件模式的代码并保存
+//     *
+//     * @param userMessage 用户提示词
+//     * @return 保存的目录
+//     */
+//    private File generateAndSaveMultiFileCode(String userMessage) {
+//        MultiFileCodeResult result = aiCodeGeneratorService.generateMultiFileCode(userMessage);
+//        return CodeFileSaver.saveMultiFileCodeResult(result);
+//    }
+//
+//    /**
+//     * 生成 HTML 模式的代码并保存（流式）
+//     *
+//     * @param userMessage 用户提示词
+//     * @return 保存的目录
+//     */
+//    private Flux<String> generateAndSaveHtmlCodeStream(String userMessage) {
+//        Flux<String> result = aiCodeGeneratorService.generateHtmlCodeStream(userMessage);
+//        // 当流式返回生成代码完成后，再保存代码
+//        StringBuilder codeBuilder = new StringBuilder();
+//        return result
+//                .doOnNext(chunk -> {
+//                    // 实时收集代码片段
+//                    codeBuilder.append(chunk);
+//                })
+//                .doOnComplete(() -> {
+//                    // 流式返回完成后保存代码
+//                    try {
+//                        String completeHtmlCode = codeBuilder.toString();
+//                        HtmlCodeResult htmlCodeResult = CodeParser.parseHtmlCode(completeHtmlCode);
+//                        // 保存代码到文件
+//                        File savedDir = CodeFileSaver.saveHtmlCodeResult(htmlCodeResult);
+//                        log.info("保存成功，路径为：" + savedDir.getAbsolutePath());
+//                    } catch (Exception e) {
+//                        log.error("保存失败: {}", e.getMessage());
+//                    }
+//                });
+//    }
+//
+//    /**
+//     * 生成多文件模式的代码并保存（流式）
+//     *
+//     * @param userMessage 用户提示词
+//     * @return 保存的目录
+//     */
+//    private Flux<String> generateAndSaveMultiFileCodeStream(String userMessage) {
+//        Flux<String> result = aiCodeGeneratorService.generateMultiFileCodeStream(userMessage);
+//        // 当流式返回生成代码完成后，再保存代码
+//        StringBuilder codeBuilder = new StringBuilder();
+//        return result
+//                .doOnNext(chunk -> {
+//                    // 实时收集代码片段
+//                    codeBuilder.append(chunk);
+//                })
+//                .doOnComplete(() -> {
+//                    // 流式返回完成后保存代码
+//                    try {
+//                        String completeMultiFileCode = codeBuilder.toString();
+//                        MultiFileCodeResult multiFileResult = CodeParser.parseMultiFileCode(completeMultiFileCode);
+//                        // 保存代码到文件
+//                        File savedDir = CodeFileSaver.saveMultiFileCodeResult(multiFileResult);
+//                        log.info("保存成功，路径为：" + savedDir.getAbsolutePath());
+//                    } catch (Exception e) {
+//                        log.error("保存失败: {}", e.getMessage());
+//                    }
+//                });
+//    }
 }

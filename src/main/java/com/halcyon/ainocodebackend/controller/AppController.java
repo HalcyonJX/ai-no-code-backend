@@ -20,6 +20,7 @@ import com.halcyon.ainocodebackend.model.entity.User;
 import com.halcyon.ainocodebackend.model.enums.CodeGenTypeEnum;
 import com.halcyon.ainocodebackend.model.vo.AppVO;
 import com.halcyon.ainocodebackend.service.AppService;
+import com.halcyon.ainocodebackend.service.ChatHistoryService;
 import com.halcyon.ainocodebackend.service.UserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,6 +49,9 @@ public class AppController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private ChatHistoryService chatHistoryService;
 
     /**
      * 创建应用
@@ -137,6 +141,8 @@ public class AppController {
         //仅本人或管理员可删除
         boolean notAuthorized = !oldApp.getUserId().equals(loginUser.getId()) && !UserConstant.ADMIN_ROLE.equals(loginUser.getUserRole());
         ThrowUtils.throwIf(notAuthorized, ErrorCode.NO_AUTH_ERROR, "无权限操作");
+        // 关联删除该应用的所有对话历史
+        chatHistoryService.deleteByAppId(id);
         boolean result = appService.removeById(id);
         return ResultUtils.success(result);
     }
@@ -157,6 +163,8 @@ public class AppController {
         // 判断是否存在
         App oldApp = appService.getById(id);
         ThrowUtils.throwIf(oldApp == null, ErrorCode.NOT_FOUND_ERROR, "应用不存在");
+        // 关联删除该应用的所有对话历史
+        chatHistoryService.deleteByAppId(id);
         boolean result = appService.removeById(id);
         return ResultUtils.success(result);
     }
